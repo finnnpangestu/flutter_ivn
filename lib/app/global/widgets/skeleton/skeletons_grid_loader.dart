@@ -11,10 +11,12 @@ class SkeletonsGridLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fullWidth = MediaQuery.of(context).size.width;
+
     return GridView.builder(
       itemCount: itemCount,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: MediaQuery.of(context).size.width / 2,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
         childAspectRatio: 1 / 2,
@@ -24,11 +26,13 @@ class SkeletonsGridLoader extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SkeletonLoader(height: 120, width: double.infinity, borderRadius: BorderRadius.circular(8)),
+            SkeletonLoader(height: fullWidth * .5, width: fullWidth, borderRadius: BorderRadius.circular(8)),
             const SizedBox(height: 6),
-            SkeletonLoader(height: 16, width: double.infinity),
+            SkeletonLoader(height: 16, width: fullWidth),
             const SizedBox(height: 4),
-            SkeletonLoader(height: 16, width: double.infinity),
+            SkeletonLoader(height: 14, width: fullWidth),
+            const SizedBox(height: 4),
+            SkeletonLoader(height: 14, width: fullWidth),
             const SizedBox(height: 6),
             Row(
               children: [
