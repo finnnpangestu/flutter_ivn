@@ -12,8 +12,8 @@ class ProductDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GScaffold(
       title: "Detail",
-      body: Center(
-        child: Text("Product Detail Page $id"),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
       ),
     );
   }

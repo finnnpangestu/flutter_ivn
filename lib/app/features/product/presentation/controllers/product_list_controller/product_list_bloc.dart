@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ivn/app/core/error/failures.dart';
-import 'package:flutter_ivn/app/features/product/domain/usecases/get_product.dart';
 import 'package:flutter_ivn/app/features/product/domain/usecases/get_products.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_event.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_state.dart';
@@ -9,11 +8,9 @@ import 'package:flutter_ivn/injection_container.dart';
 
 class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
   final useCaseGetProducts = sl<GetProducts>();
-  final useCaseGetProduct = sl<GetProduct>();
 
   ProductListBloc() : super(const ProductListState()) {
     on<GetProductsEvent>(_onGetProducts);
-    on<GetProductDetailEvent>(_onGetProductDetail);
   }
 
   String _mapFailureToMessage(Failures failure) {
@@ -32,20 +29,6 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
       },
       (data) {
         emit(state.copyWith(productsStatus: Status.loaded(data: data)));
-      },
-    );
-  }
-
-  Future<void> _onGetProductDetail(GetProductDetailEvent event, Emitter<ProductListState> emit) async {
-    emit(state.copyWith(productDetailStatus: Status.loading()));
-    final result = await useCaseGetProduct(event.id);
-
-    result.fold(
-      (failure) {
-        emit(state.copyWith(productDetailStatus: Status.error(message: _mapFailureToMessage(failure))));
-      },
-      (data) {
-        emit(state.copyWith(productDetailStatus: Status.loaded(data: data)));
       },
     );
   }
