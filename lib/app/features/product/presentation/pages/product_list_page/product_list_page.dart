@@ -2,9 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_ivn/app/features/product/presentation/state_management/product_bloc.dart';
-import 'package:flutter_ivn/app/features/product/presentation/state_management/product_event.dart';
-import 'package:flutter_ivn/app/features/product/presentation/state_management/product_state.dart';
+import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_bloc.dart';
+import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_event.dart';
+import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_state.dart';
 import 'package:flutter_ivn/app/features/product/presentation/widgets/product_list_card.dart';
 import 'package:flutter_ivn/app/global/widgets/scaffold/g_scaffold.dart';
 import 'package:flutter_ivn/app/global/widgets/skeleton/skeletons_grid_loader.dart';
@@ -18,8 +18,8 @@ class ProductListPage extends StatelessWidget {
     return GScaffold(
       title: 'Product List',
       body: BlocProvider(
-        create: (context) => ProductBloc()..add(const ProductEvent.getProducts()),
-        child: BlocBuilder<ProductBloc, ProductState>(
+        create: (context) => ProductListBloc()..add(const ProductListEvent.getProducts()),
+        child: BlocBuilder<ProductListBloc, ProductListState>(
           builder: (context, state) {
             return state.productsStatus.when(
               initial: () => const SkeletonsGridLoader(itemCount: 30),
