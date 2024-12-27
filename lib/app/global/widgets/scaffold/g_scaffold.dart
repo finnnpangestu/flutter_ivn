@@ -24,7 +24,7 @@ class GScaffold extends StatelessWidget {
         title: title != null ? Text(title!, style: GoogleFonts.poppins(fontWeight: FontWeight.w500, fontSize: 22)) : null,
         actions: actions,
         backgroundColor: Colors.white,
-        shadowColor: Colors.black.withOpacity(0.5),
+        shadowColor: Colors.black.withValues(alpha: 0.1),
       ),
       body: SafeArea(child: body),
       floatingActionButton: floatingActionButton,

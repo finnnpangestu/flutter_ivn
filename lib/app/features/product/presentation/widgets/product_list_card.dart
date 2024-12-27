@@ -16,7 +16,7 @@ class ProductListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double discountPrice = product?.price ?? 0 - (product?.price ?? 0 * (product?.discountPercentage ?? 0) / 100);
-    final double widthPicture = MediaQuery.of(context).size.width;
+    final size = MediaQuery.of(context).size;
 
     return InkWell(
       onTap: () {
@@ -30,7 +30,7 @@ class ProductListCard extends StatelessWidget {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 spreadRadius: 1,
                 blurRadius: 2,
                 offset: Offset(0, 2),
@@ -40,15 +40,16 @@ class ProductListCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /* Image */
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: Image.network(
-                  colorBlendMode: BlendMode.darken,
-                  product?.thumbnail ?? '',
-                  height: widthPicture * .5,
-                  width: widthPicture,
-                  fit: BoxFit.cover,
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: Image.network(
+                    colorBlendMode: BlendMode.darken,
+                    product?.thumbnail ?? '',
+                    height: size.height,
+                    width: size.width,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               const SizedBox(height: 6),
