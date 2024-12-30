@@ -10,11 +10,37 @@ import 'package:flutter_ivn/app/global/widgets/scaffold/g_scaffold.dart';
 import 'package:flutter_ivn/app/global/widgets/skeleton/skeletons_grid_loader.dart';
 
 @RoutePage()
-class ProductListPage extends StatelessWidget {
+class ProductListPage extends StatefulWidget {
   const ProductListPage({super.key});
 
   @override
+  State<ProductListPage> createState() => _ProductListPageState();
+}
+
+class _ProductListPageState extends State<ProductListPage> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        context.read<ProductListBloc>().add(ProductListEvent.getProducts(pagination: context.watch<ProductListBloc>().pagination.nextPage()));
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final pagination = context.watch<ProductListBloc>().pagination;
+
     return GScaffold(
       title: 'Product List',
       body: BlocProvider(
@@ -22,10 +48,11 @@ class ProductListPage extends StatelessWidget {
         child: BlocBuilder<ProductListBloc, ProductListState>(
           builder: (context, state) {
             return state.productsStatus.when(
-              initial: () => const SkeletonsGridLoader(itemCount: 30),
-              loading: () => const SkeletonsGridLoader(itemCount: 30),
+              initial: () => SkeletonsGridLoader(itemCount: pagination.limit),
+              loading: () => SkeletonsGridLoader(itemCount: pagination.limit),
               loaded: (products) {
                 return GridView.builder(
+                  controller: _scrollController,
                   padding: EdgeInsets.all(16),
                   itemCount: products.length,
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(

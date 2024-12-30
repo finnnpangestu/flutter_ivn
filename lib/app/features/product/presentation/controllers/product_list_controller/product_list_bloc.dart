@@ -3,11 +3,13 @@ import 'package:flutter_ivn/app/core/error/failures.dart';
 import 'package:flutter_ivn/app/features/product/domain/usecases/get_products.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_event.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_state.dart';
+import 'package:flutter_ivn/app/global/state/pagination/pagination.dart';
 import 'package:flutter_ivn/app/global/state/status/status.dart';
 import 'package:flutter_ivn/injection_container.dart';
 
 class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
   final useCaseGetProducts = sl<GetProducts>();
+  final Pagination pagination = Pagination(limit: 10);
 
   ProductListBloc() : super(const ProductListState()) {
     on<GetProductsEvent>(_onGetProducts);
@@ -21,7 +23,7 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
 
   Future<void> _onGetProducts(GetProductsEvent event, Emitter<ProductListState> emit) async {
     emit(state.copyWith(productsStatus: Status.loading()));
-    final result = await useCaseGetProducts();
+    final result = await useCaseGetProducts(pagination: pagination);
 
     result.fold(
       (failure) {
