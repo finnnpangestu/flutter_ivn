@@ -3,7 +3,7 @@ import 'package:flutter_ivn/app/core/error/failures.dart';
 import 'package:flutter_ivn/app/features/product/domain/usecases/get_product.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_detail_controller/product_detail_event.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_detail_controller/product_detail_state.dart';
-import 'package:flutter_ivn/app/global/state/status.dart';
+import 'package:flutter_ivn/app/global/state/status/status.dart';
 import 'package:flutter_ivn/injection_container.dart';
 
 class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
