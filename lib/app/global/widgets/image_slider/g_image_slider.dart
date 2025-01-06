@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class GImageSlider extends StatefulWidget {
   final List<String>? images;
@@ -17,34 +16,46 @@ class _GImageSliderState extends State<GImageSlider> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 300,
+      height: 400,
+      width: MediaQuery.of(context).size.width,
       child: Stack(
         children: [
-          SizedBox(
-            height: 300,
-            child: PageView.builder(
-              itemCount: widget.images?.length ?? 0,
-              onPageChanged: (page) {
-                setState(() {
-                  currentIndex = page;
-                });
-              },
-              itemBuilder: (context, index) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: CachedNetworkImage(
-                    imageUrl: widget.images?[index] ?? '',
-                    fit: BoxFit.fitHeight,
-                    placeholder: (context, url) => Center(child: CircularProgressIndicator(color: Colors.green)),
-                    errorWidget: (context, url, error) => Center(child: Icon(Icons.error)),
-                  ),
-                );
-              },
+          Container(
+            height: 325,
+            decoration: BoxDecoration(
+              color: Color(0xFFEBEEE3),
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          Positioned(
+            bottom: 25,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width - 48,
+              height: 350,
+              child: PageView.builder(
+                itemCount: widget.images?.length ?? 0,
+                onPageChanged: (page) {
+                  setState(() {
+                    currentIndex = page;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.images?[index] ?? '',
+                      fit: BoxFit.fitHeight,
+                      placeholder: (context, url) => Center(child: CircularProgressIndicator(color: Colors.green)),
+                      errorWidget: (context, url, error) => Center(child: Icon(Icons.error)),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
           Positioned(
             bottom: 0,
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery.of(context).size.width - 48,
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: Row(
@@ -52,10 +63,10 @@ class _GImageSliderState extends State<GImageSlider> {
                 children: List.generate((widget.images ?? []).length, (index) {
                   return Container(
                     margin: const EdgeInsets.symmetric(horizontal: 4),
-                    width: 6,
-                    height: 6,
+                    width: currentIndex == index ? 7 : 5,
+                    height: currentIndex == index ? 7 : 5,
                     decoration: BoxDecoration(
-                      color: currentIndex == index ? Colors.green : Colors.grey,
+                      color: currentIndex == index ? Color(0xFF8ECB71) : Color(0xFFD9D9D9),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.1),

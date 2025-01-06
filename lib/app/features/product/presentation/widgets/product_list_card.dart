@@ -15,7 +15,7 @@ class ProductListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double discountPrice = (product?.price ?? 0) - (product?.price ?? 0 * (product?.discountPercentage ?? 0) / 100);
+    final double discountPrice = (product?.price ?? 0) - ((product?.price ?? 0) * (product?.discountPercentage ?? 0) / 100);
     final size = MediaQuery.of(context).size;
 
     return InkWell(
@@ -82,7 +82,7 @@ class ProductListCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    '\$${product?.price ?? 0}',
+                    '\$${discountPrice.toStringAsFixed(2)}',
                     style: GoogleFonts.poppins(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -90,7 +90,7 @@ class ProductListCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    '\$$discountPrice',
+                    '\$${product?.price}',
                     style: GoogleFonts.poppins(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
