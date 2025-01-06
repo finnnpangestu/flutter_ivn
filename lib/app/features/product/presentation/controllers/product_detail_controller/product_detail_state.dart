@@ -7,6 +7,7 @@ part 'product_detail_state.freezed.dart';
 @freezed
 class ProductDetailState with _$ProductDetailState {
   const factory ProductDetailState({
-    @Default(Status<Product>.initial()) Status<Product> productDetailStatus,
+    @Default(Status.initial()) Status status,
+    Product? product,
   }) = _ProductDetailState;
 }

@@ -1,25 +1,25 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+class Pagination {
+  final int currentPage;
+  final int limit;
 
-part 'pagination.freezed.dart';
-part 'pagination.g.dart';
+  Pagination({this.currentPage = 0, this.limit = 10});
 
-@freezed
-class Pagination with _$Pagination {
-  const factory Pagination({
-    @Default(10) int limit,
-    @Default(1) int currentPage,
-  }) = _Pagination;
+  Pagination copyWith({int? currentPage, int? limit}) {
+    return Pagination(
+      currentPage: currentPage ?? this.currentPage,
+      limit: limit ?? this.limit,
+    );
+  }
 
-  factory Pagination.fromJson(Map<String, dynamic> json) => _$PaginationFromJson(json);
+  Pagination nextPage() {
+    return copyWith(currentPage: currentPage + limit);
+  }
 
-  const Pagination._();
+  Pagination reset() {
+    return copyWith(currentPage: 0);
+  }
 
-  Pagination reset() => copyWith(currentPage: 1);
-
-  Pagination init(int limit, int currentPage) => Pagination(
-        limit: limit,
-        currentPage: currentPage,
-      );
-
-  Pagination nextPage() => copyWith(currentPage: currentPage + 1);
+  Pagination previousPage() {
+    return copyWith(currentPage: (currentPage - limit).clamp(0, currentPage));
+  }
 }

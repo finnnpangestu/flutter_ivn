@@ -3,9 +3,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'status.freezed.dart';
 
 @freezed
-class Status<T> with _$Status<T> {
-  const factory Status.initial() = Initial<T>;
-  const factory Status.loading() = Loading<T>;
-  const factory Status.loaded({required T data}) = Loaded<T>;
-  const factory Status.error({required String message}) = Error<T>;
+class Status with _$Status {
+  const factory Status.initial() = Initial;
+  const factory Status.loading({String? message, Exception? exception}) = Loading;
+  const factory Status.loadingMore({String? message, Exception? exception}) = LoadingMore;
+  const factory Status.success({String? message, Exception? exception}) = Success;
+  const factory Status.error({required String message, required Exception exception}) = Error;
+  const factory Status.empty({String? message, Exception? exception}) = Empty;
 }

@@ -7,6 +7,7 @@ part 'product_list_state.freezed.dart';
 @freezed
 class ProductListState with _$ProductListState {
   const factory ProductListState({
-    @Default(Status<List<Product>>.initial()) Status<List<Product>> productsStatus,
+    @Default(Status.initial()) Status status,
+    @Default([]) List<Product> products,
   }) = _ProductListState;
 }

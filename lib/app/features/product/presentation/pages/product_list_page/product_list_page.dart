@@ -6,8 +6,12 @@ import 'package:flutter_ivn/app/features/product/presentation/controllers/produc
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_event.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_state.dart';
 import 'package:flutter_ivn/app/features/product/presentation/widgets/product_list_card.dart';
+import 'package:flutter_ivn/app/global/state/pagination/pagination.dart';
+import 'package:flutter_ivn/app/global/state/status/status.dart';
+import 'package:flutter_ivn/app/global/widgets/refresher/g_refresher.dart';
 import 'package:flutter_ivn/app/global/widgets/scaffold/g_scaffold.dart';
 import 'package:flutter_ivn/app/global/widgets/skeleton/skeletons_grid_loader.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 @RoutePage()
 class ProductListPage extends StatefulWidget {
@@ -18,58 +22,76 @@ class ProductListPage extends StatefulWidget {
 }
 
 class _ProductListPageState extends State<ProductListPage> {
+  final RefreshController _refreshController = RefreshController();
   final ScrollController _scrollController = ScrollController();
+  Pagination pagination = Pagination(limit: 10);
 
   @override
   void initState() {
+    context.read<ProductListBloc>().add(ProductListEvent.getProducts(pagination: pagination));
     super.initState();
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-        context.read<ProductListBloc>().add(ProductListEvent.getProducts(pagination: context.watch<ProductListBloc>().pagination.nextPage()));
+        _onLoading();
       }
     });
   }
 
+  void _onRefresh() async {
+    setState(() {
+      pagination = pagination.reset();
+    });
+    context.read<ProductListBloc>().add(ProductListEvent.getProducts(pagination: pagination.reset()));
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async {
+    setState(() {
+      pagination = pagination.nextPage();
+    });
+    context.read<ProductListBloc>().add(ProductListEvent.getProducts(pagination: pagination.nextPage()));
+    _refreshController.loadComplete();
+  }
+
   @override
   void dispose() {
-    super.dispose();
+    _refreshController.dispose();
     _scrollController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final pagination = context.watch<ProductListBloc>().pagination;
-
     return GScaffold(
       title: 'Product List',
-      body: BlocProvider(
-        create: (context) => ProductListBloc()..add(const ProductListEvent.getProducts()),
-        child: BlocBuilder<ProductListBloc, ProductListState>(
-          builder: (context, state) {
-            return state.productsStatus.when(
-              initial: () => SkeletonsGridLoader(itemCount: pagination.limit),
-              loading: () => SkeletonsGridLoader(itemCount: pagination.limit),
-              loaded: (products) {
-                return GridView.builder(
-                  controller: _scrollController,
-                  padding: EdgeInsets.all(16),
-                  itemCount: products.length,
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: MediaQuery.of(context).size.width / 2,
-                    childAspectRatio: 1 / 2,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                  ),
-                  itemBuilder: (context, index) {
-                    return ProductListCard(product: products[index]);
-                  },
-                );
+      body: BlocBuilder<ProductListBloc, ProductListState>(
+        builder: (context, state) {
+          return GRefresher(
+            refreshController: _refreshController,
+            scrollController: _scrollController,
+            onLoading: _onLoading,
+            onRefresh: _onRefresh,
+            child: GridView.builder(
+              controller: _scrollController,
+              padding: EdgeInsets.all(16),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.5,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+              ),
+              itemCount: state.products.length + (state.status == Status.loadingMore() ? 2 : 0),
+              itemBuilder: (context, index) {
+                if (index >= state.products.length) {
+                  return SkeletonsGridLoader(itemCount: 2);
+                }
+
+                return ProductListCard(product: state.products[index]);
               },
-              error: (message) => Center(child: Text(message)),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

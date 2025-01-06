@@ -4,7 +4,6 @@ import 'package:flutter_ivn/app/features/product/data/repositories/product_repos
 import 'package:flutter_ivn/app/features/product/domain/repositories/product_repository.dart';
 import 'package:flutter_ivn/app/features/product/domain/usecases/get_product.dart';
 import 'package:flutter_ivn/app/features/product/domain/usecases/get_products.dart';
-import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,9 +18,6 @@ Future<void> init() async {
 
   /* Repositories */
   sl.registerLazySingleton<ProductRepository>(() => ProductRepositoryImpl(remoteDataSource: sl()));
-
-  /* BloC */
-  sl.registerFactory(() => ProductListBloc());
 
   /* Use Case */
   sl.registerLazySingleton(() => GetProducts(sl()));

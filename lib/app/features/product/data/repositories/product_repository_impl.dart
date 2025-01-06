@@ -28,7 +28,7 @@ class ProductRepositoryImpl implements ProductRepository {
   @override
   Future<Either<Failures, List<Product>>> fetchProducts({Pagination? pagination}) async {
     try {
-      final products = await remoteDataSource.getProducts();
+      final products = await remoteDataSource.getProducts(pagination: pagination);
       return Right(products);
     } on ServerException catch (error) {
       return Left(ServerFailure(error.message));

@@ -27,7 +27,10 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   @override
   Future<List<Product>> getProducts({Pagination? pagination}) async {
     try {
-      final response = await apiClient.get("/products", queryParams: pagination?.toJson());
+      final response = await apiClient.get("/products", queryParams: {
+        "skip": (pagination?.currentPage ?? 0).toString(),
+        "limit": (pagination?.limit ?? 10).toString(),
+      });
       final List<dynamic> data = response['products'];
 
       return data.map((json) => Product.fromJson(json as Map<String, dynamic>)).toList();

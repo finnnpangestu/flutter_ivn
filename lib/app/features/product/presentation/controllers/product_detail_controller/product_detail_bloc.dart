@@ -20,15 +20,15 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
   }
 
   Future<void> _onGetProductDetail(GetProductDetailEvent event, Emitter<ProductDetailState> emit) async {
-    emit(state.copyWith(productDetailStatus: Status.loading()));
+    emit(state.copyWith(status: Status.loading()));
     final result = await useCaseGetProducts(event.id);
 
     result.fold(
       (failure) {
-        emit(state.copyWith(productDetailStatus: Status.error(message: _mapFailureToMessage(failure))));
+        emit(state.copyWith(status: Status.error(exception: Exception(failure.toString()), message: _mapFailureToMessage(failure))));
       },
       (data) {
-        emit(state.copyWith(productDetailStatus: Status.loaded(data: data)));
+        emit(state.copyWith(status: Status.success(), product: data));
       },
     );
   }
