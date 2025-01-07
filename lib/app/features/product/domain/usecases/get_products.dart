@@ -9,7 +9,7 @@ class GetProducts {
 
   GetProducts(this.repository);
 
-  Future<Either<Failures, List<Product>>> call({Pagination? pagination}) async {
-    return await repository.fetchProducts(pagination: pagination);
+  Future<Either<Failures, List<Product>>> call({Pagination? pagination, String? searchValue}) async {
+    return await repository.fetchProducts(pagination: pagination, searchValue: searchValue);
   }
 }

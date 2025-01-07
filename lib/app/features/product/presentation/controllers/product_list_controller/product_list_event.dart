@@ -5,5 +5,5 @@ part 'product_list_event.freezed.dart';
 
 @freezed
 class ProductListEvent with _$ProductListEvent {
-  const factory ProductListEvent.getProducts({required Pagination pagination}) = GetProductsEvent;
+  const factory ProductListEvent.getProducts({required Pagination pagination, String? searchValue}) = GetProductsEvent;
 }

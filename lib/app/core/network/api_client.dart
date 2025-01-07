@@ -16,7 +16,7 @@ class APIClient {
     Map<String, dynamic>? queryParameters,
   }) async {
     final uri = queryParameters != null && queryParameters.isNotEmpty
-        ? Uri.parse('${Constants.baseDummyUrl}$url').replace(queryParameters: queryParameters.cast<String, String>())
+        ? Uri.parse('${Constants.baseDummyUrl}$url').replace(queryParameters: queryParameters.cast<String, dynamic>())
         : Uri.parse('${Constants.baseDummyUrl}$url');
 
     final requestHeaders = headers ?? {'Content-Type': 'application/json'};

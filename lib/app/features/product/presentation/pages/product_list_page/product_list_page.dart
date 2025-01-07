@@ -1,5 +1,6 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_bloc.dart';
@@ -11,6 +12,9 @@ import 'package:flutter_ivn/app/global/state/status/status.dart';
 import 'package:flutter_ivn/app/global/widgets/refresher/g_refresher.dart';
 import 'package:flutter_ivn/app/global/widgets/scaffold/g_scaffold.dart';
 import 'package:flutter_ivn/app/global/widgets/skeleton/skeletons_grid_loader.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/bx.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 @RoutePage()
@@ -63,36 +67,88 @@ class _ProductListPageState extends State<ProductListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GScaffold(
-      title: 'Product List',
-      body: BlocBuilder<ProductListBloc, ProductListState>(
-        builder: (context, state) {
-          return GRefresher(
+    Timer? debounce;
+
+    return BlocBuilder<ProductListBloc, ProductListState>(
+      builder: (context, state) {
+        return GScaffold(
+          actions: [
+            InkWell(
+              onTap: () => context.read<ProductListBloc>().onFilter(context),
+              borderRadius: BorderRadius.circular(99),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                child: Iconify(Bx.filter),
+              ),
+            ),
+          ],
+          title: 'Product List',
+          body: GRefresher(
             refreshController: _refreshController,
             scrollController: _scrollController,
             onLoading: _onLoading,
             onRefresh: _onRefresh,
-            child: GridView.builder(
+            child: ListView(
               controller: _scrollController,
-              padding: EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.5,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-              ),
-              itemCount: state.products.length + (state.status == Status.loadingMore() ? 2 : 0),
-              itemBuilder: (context, index) {
-                if (index >= state.products.length) {
-                  return SkeletonsGridLoader(itemCount: 2);
-                }
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: SearchBar(
+                    shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                    padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
+                    elevation: WidgetStatePropertyAll(0),
+                    backgroundColor: WidgetStatePropertyAll(Color(0xFFF1F1F1)),
+                    hintText: 'Search product ... .',
+                    hintStyle: WidgetStatePropertyAll(GoogleFonts.inter(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 16,
+                      color: Color(0xFF777777),
+                    )),
+                    trailing: [Iconify(Bx.search, size: 24, color: Color(0xFF777777))],
+                    textStyle: WidgetStatePropertyAll(GoogleFonts.inter(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 16,
+                      color: Color(0xFF333333),
+                    )),
+                    onChanged: (value) async {
+                      debounce?.cancel();
 
-                return ProductListCard(product: state.products[index]);
-              },
+                      debounce = Timer(const Duration(milliseconds: 300), () {
+                        context.read<ProductListBloc>().add(ProductListEvent.getProducts(pagination: pagination, searchValue: value));
+                      });
+                    },
+                    onSubmitted: (value) =>
+                        context.read<ProductListBloc>().add(ProductListEvent.getProducts(pagination: pagination.reset(), searchValue: value)),
+                  ),
+                ),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.5,
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 8,
+                  ),
+                  itemCount: state.products.length + (state.status == Status.loadingMore() ? 2 : 0),
+                  itemBuilder: (context, index) {
+                    if (index >= state.products.length) {
+                      return SkeletonsGridLoader(itemCount: 2);
+                    }
+
+                    if (state.status == Status.loading() || state.status == Status.initial()) {
+                      return SkeletonsGridLoader(itemCount: pagination.limit);
+                    }
+
+                    return ProductListCard(product: state.products[index]);
+                  },
+                ),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -26,7 +26,7 @@ class MainApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routerConfig: _appRouter.config(),
         theme: ThemeData(
-          textTheme: GoogleFonts.poppinsTextTheme(),
+          textTheme: GoogleFonts.interTextTheme(),
           primarySwatch: Colors.green,
           primaryColor: Colors.green,
         ),

@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ivn/app/core/error/failures.dart';
 import 'package:flutter_ivn/app/features/product/domain/usecases/get_products.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_event.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_state.dart';
+import 'package:flutter_ivn/app/features/product/presentation/dialog/product_filter_dialog.dart';
+import 'package:flutter_ivn/app/global/state/pagination/pagination.dart';
 import 'package:flutter_ivn/app/global/state/status/status.dart';
 import 'package:flutter_ivn/injection_container.dart';
 
@@ -26,7 +29,7 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
       emit(state.copyWith(status: Status.loading()));
     }
 
-    final result = await useCaseGetProducts(pagination: event.pagination);
+    final result = await useCaseGetProducts(pagination: event.pagination, searchValue: event.searchValue);
 
     result.fold(
       (failure) {
@@ -36,5 +39,13 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
         emit(state.copyWith(status: Status.success(), products: event.pagination.currentPage > 0 ? [...state.products, ...data] : data));
       },
     );
+  }
+
+  Future<void> onFilter(BuildContext context) async {
+    final result = await ProductFilterDialog.start(context: context);
+
+    if (result) {
+      add(ProductListEvent.getProducts(pagination: Pagination().reset()));
+    }
   }
 }

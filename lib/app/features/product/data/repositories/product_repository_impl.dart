@@ -3,6 +3,7 @@ import 'package:flutter_ivn/app/core/error/exceptions.dart';
 import 'package:flutter_ivn/app/core/error/failures.dart';
 import 'package:flutter_ivn/app/features/product/data/datasources/product_remote_data_source.dart';
 import 'package:flutter_ivn/app/features/product/domain/repositories/product_repository.dart';
+import 'package:flutter_ivn/app/global/models/category_product/category_product.dart';
 import 'package:flutter_ivn/app/global/models/product/product.dart';
 import 'package:flutter_ivn/app/global/state/pagination/pagination.dart';
 
@@ -26,10 +27,24 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<Either<Failures, List<Product>>> fetchProducts({Pagination? pagination}) async {
+  Future<Either<Failures, List<Product>>> fetchProducts({Pagination? pagination, String? searchValue}) async {
     try {
-      final products = await remoteDataSource.getProducts(pagination: pagination);
+      final products = await remoteDataSource.getProducts(pagination: pagination, searchValue: searchValue);
       return Right(products);
+    } on ServerException catch (error) {
+      return Left(ServerFailure(error.message));
+    } on NetworkException catch (error) {
+      return Left(NetworkFailure(error.message));
+    } catch (error) {
+      return Left(UnknownFailure(error.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failures, List<CategoryProduct>>> fetchCategoryProducts() async {
+    try {
+      final categories = await remoteDataSource.getCategoryProducts();
+      return Right(categories);
     } on ServerException catch (error) {
       return Left(ServerFailure(error.message));
     } on NetworkException catch (error) {
