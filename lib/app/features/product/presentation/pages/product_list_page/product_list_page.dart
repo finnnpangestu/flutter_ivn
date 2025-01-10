@@ -122,9 +122,9 @@ class _ProductListPageState extends State<ProductListPage> {
                     mainAxisSpacing: 8,
                     crossAxisSpacing: 8,
                   ),
-                  itemCount: state.products.length + (state.status == Status.loadingMore() ? 2 : 0),
+                  itemCount: state.products.length + (state.status == Status.loading() ? 2 : 0),
                   itemBuilder: (context, index) {
-                    if (index >= state.products.length) {
+                    if (state.status == Status.loading() && index == state.products.length) {
                       return SkeletonsGridLoader(itemCount: 2);
                     }
 
