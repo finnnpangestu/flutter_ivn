@@ -5,7 +5,7 @@ import 'package:flutter_ivn/app/global/state/status/status.dart';
 import 'package:flutter_ivn/injection_container.dart';
 
 class ProductDetailCubit extends Cubit<ProductDetailState> {
-  final useCaseGetProducts = sl<GetProduct>();
+  final useCaseGetProducts = sl<UseCaseGetProduct>();
 
   ProductDetailCubit() : super(const ProductDetailState());
 

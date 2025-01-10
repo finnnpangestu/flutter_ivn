@@ -10,7 +10,7 @@ import 'package:flutter_ivn/app/global/state/status/status.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockGetProducts extends Mock implements GetProducts {}
+class MockGetProducts extends Mock implements UseCaseGetProducts {}
 
 void main() {
   late MockGetProducts mockGetProducts;

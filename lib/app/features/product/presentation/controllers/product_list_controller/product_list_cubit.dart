@@ -8,10 +8,10 @@ import 'package:flutter_ivn/app/global/state/status/status.dart';
 import 'package:flutter_ivn/injection_container.dart';
 
 class ProductListCubit extends Cubit<ProductListState> {
-  final GetProducts useCaseGetProducts;
+  final UseCaseGetProducts useCaseGetProducts;
 
-  ProductListCubit({GetProducts? useCase})
-      : useCaseGetProducts = useCase ?? sl<GetProducts>(),
+  ProductListCubit({UseCaseGetProducts? useCase})
+      : useCaseGetProducts = useCase ?? sl<UseCaseGetProducts>(),
         super(ProductListState());
 
   Future<void> getProducts(Pagination pagination, {String? searchValue}) async {

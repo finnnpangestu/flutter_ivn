@@ -3,10 +3,10 @@ import 'package:flutter_ivn/app/core/error/failures.dart';
 import 'package:flutter_ivn/app/features/product/domain/repositories/product_repository.dart';
 import 'package:flutter_ivn/app/global/models/category_product/category_product.dart';
 
-class GetCategoryProducts {
+class UseCaseGetCategoryProducts {
   final ProductRepository repository;
 
-  GetCategoryProducts(this.repository);
+  UseCaseGetCategoryProducts(this.repository);
 
   Future<Either<Failures, List<CategoryProduct>>> call() async {
     return await repository.fetchCategoryProducts();
