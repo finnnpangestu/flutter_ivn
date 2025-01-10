@@ -11,11 +11,11 @@ class ProductFilterDialog {
       barrierDismissible: false,
       transitionDuration: const Duration(milliseconds: 300),
       pageBuilder: (context, animation, secondaryAnimation) {
-        return Align(
-          alignment: Alignment.centerRight,
-          child: Material(
-            color: Colors.white,
-            child: SafeArea(
+        return SafeArea(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Material(
+              color: Colors.white,
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.85,
                 height: MediaQuery.of(context).size.height,

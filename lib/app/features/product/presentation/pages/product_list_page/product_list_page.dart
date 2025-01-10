@@ -77,7 +77,7 @@ class _ProductListPageState extends State<ProductListPage> {
               ),
             ),
           ],
-          title: 'Product List',
+          title: 'Product',
           body: GRefresher(
             refreshController: _refreshController,
             scrollController: _scrollController,
