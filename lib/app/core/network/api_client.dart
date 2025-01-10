@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_ivn/app/core/error/exceptions.dart';
 import 'package:flutter_ivn/app/core/utils/constants.dart';
 import 'package:http/http.dart' as http;
 
@@ -44,7 +45,7 @@ class APIClient {
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
-      throw Exception("Failed to load data: ${response.statusCode}");
+      throw ServerException(message: "Failed to load data: ${response.statusCode}");
     }
   }
 

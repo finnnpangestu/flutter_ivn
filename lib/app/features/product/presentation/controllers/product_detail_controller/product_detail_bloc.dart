@@ -1,17 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ivn/app/core/error/failures.dart';
 import 'package:flutter_ivn/app/features/product/domain/usecases/get_product.dart';
-import 'package:flutter_ivn/app/features/product/presentation/controllers/product_detail_controller/product_detail_event.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_detail_controller/product_detail_state.dart';
 import 'package:flutter_ivn/app/global/state/status/status.dart';
 import 'package:flutter_ivn/injection_container.dart';
 
-class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
+class ProductDetailCubit extends Cubit<ProductDetailState> {
   final useCaseGetProducts = sl<GetProduct>();
 
-  ProductDetailBloc() : super(const ProductDetailState()) {
-    on<GetProductDetailEvent>(_onGetProductDetail);
-  }
+  ProductDetailCubit() : super(const ProductDetailState());
 
   String _mapFailureToMessage(Failures failure) {
     if (failure is ServerFailure) return "Server Error: ${failure.message}";
@@ -19,9 +16,10 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
     return "Unexpected Error: ${failure.message}";
   }
 
-  Future<void> _onGetProductDetail(GetProductDetailEvent event, Emitter<ProductDetailState> emit) async {
+  Future<void> onGetProductDetail(String id) async {
     emit(state.copyWith(status: Status.loading()));
-    final result = await useCaseGetProducts(event.id);
+
+    final result = await useCaseGetProducts(id);
 
     result.fold(
       (failure) {

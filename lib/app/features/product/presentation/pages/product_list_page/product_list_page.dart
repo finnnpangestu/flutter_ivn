@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_bloc.dart';
-import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_event.dart';
+import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_cubit.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_state.dart';
 import 'package:flutter_ivn/app/features/product/presentation/widgets/product_list_card.dart';
 import 'package:flutter_ivn/app/global/state/pagination/pagination.dart';
@@ -28,11 +27,12 @@ class ProductListPage extends StatefulWidget {
 class _ProductListPageState extends State<ProductListPage> {
   final RefreshController _refreshController = RefreshController();
   final ScrollController _scrollController = ScrollController();
-  Pagination pagination = Pagination(limit: 10);
+  Pagination pagination = Pagination(limit: 10, currentPage: 0);
+  Timer? debounce;
 
   @override
   void initState() {
-    context.read<ProductListBloc>().add(ProductListEvent.getProducts(pagination: pagination));
+    context.read<ProductListCubit>().getProducts(pagination);
     super.initState();
 
     _scrollController.addListener(() {
@@ -43,18 +43,14 @@ class _ProductListPageState extends State<ProductListPage> {
   }
 
   void _onRefresh() async {
-    setState(() {
-      pagination = pagination.reset();
-    });
-    context.read<ProductListBloc>().add(ProductListEvent.getProducts(pagination: pagination.reset()));
+    setState(() => pagination = pagination.reset());
+    context.read<ProductListCubit>().getProducts(pagination);
     _refreshController.refreshCompleted();
   }
 
   void _onLoading() async {
-    setState(() {
-      pagination = pagination.nextPage();
-    });
-    context.read<ProductListBloc>().add(ProductListEvent.getProducts(pagination: pagination.nextPage()));
+    setState(() => pagination = pagination.nextPage());
+    context.read<ProductListCubit>().getProducts(pagination);
     _refreshController.loadComplete();
   }
 
@@ -62,19 +58,18 @@ class _ProductListPageState extends State<ProductListPage> {
   void dispose() {
     _refreshController.dispose();
     _scrollController.dispose();
+    debounce?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    Timer? debounce;
-
-    return BlocBuilder<ProductListBloc, ProductListState>(
+    return BlocBuilder<ProductListCubit, ProductListState>(
       builder: (context, state) {
         return GScaffold(
           actions: [
             InkWell(
-              onTap: () => context.read<ProductListBloc>().onFilter(context),
+              onTap: () => context.read<ProductListCubit>().filter(context),
               borderRadius: BorderRadius.circular(99),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -110,15 +105,11 @@ class _ProductListPageState extends State<ProductListPage> {
                       fontSize: 16,
                       color: Color(0xFF333333),
                     )),
-                    onChanged: (value) async {
+                    onChanged: (value) {
                       debounce?.cancel();
-
-                      debounce = Timer(const Duration(milliseconds: 300), () {
-                        context.read<ProductListBloc>().add(ProductListEvent.getProducts(pagination: pagination, searchValue: value));
-                      });
+                      debounce = Timer(Duration(milliseconds: 300), () => context.read<ProductListCubit>().getProducts(pagination.reset(), searchValue: value));
                     },
-                    onSubmitted: (value) =>
-                        context.read<ProductListBloc>().add(ProductListEvent.getProducts(pagination: pagination.reset(), searchValue: value)),
+                    onSubmitted: (value) => context.read<ProductListCubit>().getProducts(pagination.reset(), searchValue: value),
                   ),
                 ),
                 GridView.builder(

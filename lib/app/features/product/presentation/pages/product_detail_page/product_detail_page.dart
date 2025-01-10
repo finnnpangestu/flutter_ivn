@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_detail_controller/product_detail_bloc.dart';
-import 'package:flutter_ivn/app/features/product/presentation/controllers/product_detail_controller/product_detail_event.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_detail_controller/product_detail_state.dart';
 import 'package:flutter_ivn/app/global/state/status/status.dart';
 import 'package:flutter_ivn/app/global/widgets/image_slider/g_image_slider.dart';
@@ -63,12 +62,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   @override
   void initState() {
-    context.read<ProductDetailBloc>().add(GetProductDetailEvent(widget.id));
+    context.read<ProductDetailCubit>().onGetProductDetail(widget.id);
     super.initState();
   }
 
   void _onRefresh() async {
-    context.read<ProductDetailBloc>().add(GetProductDetailEvent(widget.id));
+    context.read<ProductDetailCubit>().onGetProductDetail(widget.id);
     _refreshController.refreshCompleted();
   }
 
@@ -80,7 +79,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProductDetailBloc, ProductDetailState>(
+    return BlocBuilder<ProductDetailCubit, ProductDetailState>(
       builder: (context, state) {
         final double discountPrice = (state.product?.price ?? 0) - ((state.product?.price ?? 0) * (state.product?.discountPercentage ?? 0) / 100);
 
