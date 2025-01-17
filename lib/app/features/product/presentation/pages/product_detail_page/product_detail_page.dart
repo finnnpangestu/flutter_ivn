@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_ivn/app/features/product/presentation/controllers/product_detail_controller/product_detail_bloc.dart';
+import 'package:flutter_ivn/app/features/product/presentation/controllers/product_detail_controller/product_detail_cubit.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_detail_controller/product_detail_state.dart';
 import 'package:flutter_ivn/app/global/state/status/status.dart';
 import 'package:flutter_ivn/app/global/widgets/image_slider/g_image_slider.dart';

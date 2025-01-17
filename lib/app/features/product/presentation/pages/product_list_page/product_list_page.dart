@@ -26,7 +26,7 @@ class ProductListPage extends StatefulWidget {
 
 class _ProductListPageState extends State<ProductListPage> {
   final RefreshController _refreshController = RefreshController();
-  final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
   Pagination pagination = Pagination(limit: 10, currentPage: 0);
   Timer? debounce;
 
@@ -34,12 +34,6 @@ class _ProductListPageState extends State<ProductListPage> {
   void initState() {
     context.read<ProductListCubit>().getProducts(pagination);
     super.initState();
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-        _onLoading();
-      }
-    });
   }
 
   void _onRefresh() async {
@@ -57,7 +51,6 @@ class _ProductListPageState extends State<ProductListPage> {
   @override
   void dispose() {
     _refreshController.dispose();
-    _scrollController.dispose();
     debounce?.cancel();
     super.dispose();
   }
@@ -80,15 +73,14 @@ class _ProductListPageState extends State<ProductListPage> {
           title: 'Product',
           body: GRefresher(
             refreshController: _refreshController,
-            scrollController: _scrollController,
-            onLoading: _onLoading,
+            onLoading: _searchController.text.isNotEmpty ? null : _onLoading,
             onRefresh: _onRefresh,
             child: ListView(
-              controller: _scrollController,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: SearchBar(
+                    controller: _searchController,
                     shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
                     padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
                     elevation: WidgetStatePropertyAll(0),
