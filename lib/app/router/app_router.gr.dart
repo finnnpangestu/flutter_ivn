@@ -10,6 +10,25 @@
 part of 'app_router.dart';
 
 /// generated route for
+/// [CartPage]
+class CartRoute extends PageRouteInfo<void> {
+  const CartRoute({List<PageRouteInfo>? children})
+      : super(
+          CartRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'CartRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CartPage();
+    },
+  );
+}
+
+/// generated route for
 /// [DashboardPage]
 class DashboardRoute extends PageRouteInfo<void> {
   const DashboardRoute({List<PageRouteInfo>? children})
@@ -30,10 +49,13 @@ class DashboardRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [MainFeaturePage]
-class MainFeatureRoute extends PageRouteInfo<void> {
-  const MainFeatureRoute({List<PageRouteInfo>? children})
-      : super(
+class MainFeatureRoute extends PageRouteInfo<MainFeatureRouteArgs> {
+  MainFeatureRoute({
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
           MainFeatureRoute.name,
+          args: MainFeatureRouteArgs(key: key),
           initialChildren: children,
         );
 
@@ -42,9 +64,22 @@ class MainFeatureRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const MainFeaturePage();
+      final args = data.argsAs<MainFeatureRouteArgs>(
+          orElse: () => const MainFeatureRouteArgs());
+      return MainFeaturePage(key: args.key);
     },
   );
+}
+
+class MainFeatureRouteArgs {
+  const MainFeatureRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'MainFeatureRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for

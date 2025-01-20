@@ -1,40 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_ivn/app/features/main/presentation/controllers/main_cubit.dart';
+import 'package:flutter_ivn/app/features/main/presentation/controllers/main_state.dart';
 import 'package:flutter_ivn/app/global/widgets/bottom_nav_scaffold/g_bottom_nav_scaffold.dart';
-import 'package:flutter_ivn/app/router/app_router.dart';
 
 @RoutePage()
-class MainFeaturePage extends StatefulWidget {
-  const MainFeaturePage({super.key});
+class MainFeaturePage extends StatelessWidget {
+  MainFeaturePage({super.key});
 
-  @override
-  State<MainFeaturePage> createState() => _MainFeaturePageState();
-}
-
-class _MainFeaturePageState extends State<MainFeaturePage> {
-  int _currentIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-    switch (index) {
-      case 0:
-        context.router.replace(DashboardRoute());
-        break;
-      case 1:
-        context.router.replace(ProductListRoute());
-        break;
-      case 2:
-        // context.router.push(ProductListRoute());
-        break;
-      case 3:
-        // context.router.push(ProductListRoute());
-        break;
-    }
-  }
-
-  List<BottomNavigationBarItem> items = [
+  final List<BottomNavigationBarItem> items = [
     BottomNavigationBarItem(
       icon: Icon(CupertinoIcons.home),
       label: 'Home',
@@ -55,11 +30,17 @@ class _MainFeaturePageState extends State<MainFeaturePage> {
 
   @override
   Widget build(BuildContext context) {
-    return GBottomNavScaffold(
-      currentIndex: _currentIndex,
-      onTap: _onItemTapped,
-      items: items,
-      child: const AutoRouter(),
+    return BlocBuilder<MainCubit, MainState>(
+      builder: (context, state) {
+        final read = context.read<MainCubit>();
+
+        return GBottomNavScaffold(
+          currentIndex: state.currentIndex,
+          onTap: (value) => read.onTabTapped(value, context),
+          items: items,
+          child: const AutoRouter(),
+        );
+      },
     );
   }
 }

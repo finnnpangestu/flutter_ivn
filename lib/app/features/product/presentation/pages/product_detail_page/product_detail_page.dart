@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_detail_controller/product_detail_cubit.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_detail_controller/product_detail_state.dart';
+import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_cubit.dart';
+import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_state.dart';
 import 'package:flutter_ivn/app/global/state/status/status.dart';
 import 'package:flutter_ivn/app/global/widgets/image_slider/g_image_slider.dart';
 import 'package:flutter_ivn/app/global/widgets/refresher/g_refresher.dart';
@@ -326,32 +328,52 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                 ),
                 SizedBox(width: 8),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    side: BorderSide(color: Colors.black, width: 2, style: BorderStyle.solid),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(99)),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Iconify(
-                        Bx.cart_alt,
-                        color: Colors.black,
-                        size: 20,
+                BlocBuilder<ProductListCubit, ProductListState>(
+                  builder: (context, stateList) {
+                    final read = context.read<ProductListCubit>();
+
+                    return ElevatedButton(
+                      onPressed: () {
+                        read.onCartProductChange(product: state.product);
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        side: BorderSide(color: Colors.black, width: 2, style: BorderStyle.solid),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(99)),
                       ),
-                      SizedBox(width: 8),
-                      Text(
-                        'Add to Cart',
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (stateList.carts.contains(state.product)) ...[
+                            Text(
+                              '${stateList.carts.where((element) => element == state.product).length} items',
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ] else ...[
+                            Iconify(
+                              Bx.cart_alt,
+                              color: Colors.black,
+                              size: 20,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              'Add to Cart',
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
               ],
             ),

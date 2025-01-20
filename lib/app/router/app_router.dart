@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ivn/app/features/cart/presentation/pages/cart_page.dart';
 import 'package:flutter_ivn/app/features/main/presentation/main_feature.dart';
 import 'package:flutter_ivn/app/features/dashboard/presentation/pages/dashboard_page/dashboard_page.dart';
 import 'package:flutter_ivn/app/features/product/presentation/pages/product_detail_page/product_detail_page.dart';
@@ -27,6 +28,12 @@ class AppRouter extends RootStackRouter {
             AutoRoute(
               path: "products",
               page: ProductListRoute.page,
+            ),
+
+            /* Cart */
+            AutoRoute(
+              path: "cart",
+              page: CartRoute.page,
             ),
           ],
         ),

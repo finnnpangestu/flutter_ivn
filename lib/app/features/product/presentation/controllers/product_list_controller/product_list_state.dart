@@ -9,5 +9,6 @@ class ProductListState with _$ProductListState {
   const factory ProductListState({
     @Default(Status.initial()) Status status,
     @Default([]) List<Product> products,
+    @Default([]) List<Product> carts,
   }) = _ProductListState;
 }

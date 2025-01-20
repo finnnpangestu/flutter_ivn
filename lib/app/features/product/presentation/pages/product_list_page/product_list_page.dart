@@ -11,6 +11,7 @@ import 'package:flutter_ivn/app/global/state/status/status.dart';
 import 'package:flutter_ivn/app/global/widgets/refresher/g_refresher.dart';
 import 'package:flutter_ivn/app/global/widgets/scaffold/g_scaffold.dart';
 import 'package:flutter_ivn/app/global/widgets/skeleton/skeletons_grid_loader.dart';
+import 'package:flutter_ivn/app/router/app_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/bx.dart';
@@ -116,6 +117,8 @@ class _ProductListPageState extends State<ProductListPage> {
                   ),
                   itemCount: state.products.length + (state.status == Status.loading() ? 2 : 0),
                   itemBuilder: (context, index) {
+                    final read = context.read<ProductListCubit>();
+
                     if (state.status == Status.loading() && index == state.products.length) {
                       return SkeletonsGridLoader(itemCount: 2);
                     }
@@ -124,12 +127,45 @@ class _ProductListPageState extends State<ProductListPage> {
                       return SkeletonsGridLoader(itemCount: pagination.limit);
                     }
 
-                    return ProductListCard(product: state.products[index]);
+                    return ProductListCard(
+                      product: state.products[index],
+                      onPressed: () => read.onCartProductChange(product: state.products[index]),
+                      isInsideCart: state.carts.contains(state.products[index]),
+                      isLenghtProductInCart: state.carts.where((element) => element == state.products[index]).length,
+                    );
                   },
                 ),
               ],
             ),
           ),
+          floatingActionButton: state.carts.isNotEmpty
+              ? FloatingActionButton(
+                  backgroundColor: Color(0xFFF1F1F1),
+                  onPressed: () => context.router.push(CartRoute()),
+                  child: SizedBox(
+                    width: 36,
+                    height: 36,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Iconify(Bx.cart, size: 24, color: Color(0xFF333333)),
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(color: Color(0xFF333333), shape: BoxShape.circle),
+                            child: Text(
+                              state.carts.length.toString(),
+                              style: GoogleFonts.inter(fontWeight: FontWeight.w500, fontSize: 12, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : null,
         );
       },
     );

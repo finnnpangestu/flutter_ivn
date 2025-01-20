@@ -3,16 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ivn/app/features/product/domain/usecases/get_products.dart';
 import 'package:flutter_ivn/app/features/product/presentation/controllers/product_list_controller/product_list_state.dart';
 import 'package:flutter_ivn/app/features/product/presentation/dialog/product_filter_dialog.dart';
+import 'package:flutter_ivn/app/global/models/product/product.dart';
 import 'package:flutter_ivn/app/global/state/pagination/pagination.dart';
 import 'package:flutter_ivn/app/global/state/status/status.dart';
 import 'package:flutter_ivn/injection_container.dart';
 
 class ProductListCubit extends Cubit<ProductListState> {
-  final UseCaseGetProducts useCaseGetProducts;
+  final useCaseGetProducts = sl<UseCaseGetProducts>();
 
-  ProductListCubit({UseCaseGetProducts? useCase})
-      : useCaseGetProducts = useCase ?? sl<UseCaseGetProducts>(),
-        super(ProductListState());
+  ProductListCubit({UseCaseGetProducts? useCase}) : super(ProductListState());
 
   Future<void> getProducts(Pagination pagination, {String? searchValue}) async {
     try {
@@ -45,5 +44,9 @@ class ProductListCubit extends Cubit<ProductListState> {
     if (result) {
       getProducts(Pagination().reset());
     }
+  }
+
+  void onCartProductChange({Product? product}) {
+    emit(state.copyWith(carts: [...state.carts, product!]));
   }
 }

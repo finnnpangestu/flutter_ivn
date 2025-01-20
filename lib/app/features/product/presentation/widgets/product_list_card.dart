@@ -9,10 +9,16 @@ import 'package:iconify_flutter/icons/bx.dart';
 
 class ProductListCard extends StatelessWidget {
   final Product? product;
+  final VoidCallback? onPressed;
+  final bool? isInsideCart;
+  final int? isLenghtProductInCart;
 
   const ProductListCard({
     super.key,
     this.product,
+    this.onPressed,
+    this.isInsideCart = false,
+    this.isLenghtProductInCart = 0,
   });
 
   @override
@@ -21,10 +27,7 @@ class ProductListCard extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return InkWell(
-      onTap: () {
-        context.router.push(ProductDetailRoute(id: (product?.id ?? 0).toString()));
-      },
-      onHover: (value) {},
+      onTap: () => context.router.push(ProductDetailRoute(id: (product?.id ?? 0).toString())),
       borderRadius: BorderRadius.circular(4),
       child: Container(
           // padding: EdgeInsets.all(8),
@@ -127,7 +130,7 @@ class ProductListCard extends StatelessWidget {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: onPressed,
                             style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.zero,
                               backgroundColor: Colors.white,
@@ -138,20 +141,31 @@ class ProductListCard extends StatelessWidget {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Iconify(
-                                  Bx.cart_alt,
-                                  color: Colors.black,
-                                  size: 20,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Add to Cart',
-                                  style: GoogleFonts.inter(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Colors.black,
+                                if (isInsideCart ?? false) ...[
+                                  Text(
+                                    '$isLenghtProductInCart items',
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
                                   ),
-                                ),
+                                ] else ...[
+                                  Iconify(
+                                    Bx.cart_alt,
+                                    color: Colors.black,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Add to Cart',
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
                               ],
                             ),
                           ),
