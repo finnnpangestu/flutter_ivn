@@ -11,18 +11,18 @@ class MainCubit extends Cubit<MainState> {
     emit(state.copyWith(currentIndex: index));
 
     switch (index) {
+      // case 0:
+      //   context.router.replace(DashboardRoute());
+      //   break;
       case 0:
-        context.router.replace(DashboardRoute());
-        break;
-      case 1:
         context.router.replace(ProductListRoute());
         break;
-      case 2:
+      case 1:
         context.router.replace(CartRoute());
         break;
-      case 3:
-        // context.router.push(ProductListRoute());
-        break;
+      // case 3:
+      //   // context.router.push(ProductListRoute());
+      //   break;
     }
   }
 }

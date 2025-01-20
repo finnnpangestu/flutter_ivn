@@ -10,10 +10,10 @@ class MainFeaturePage extends StatelessWidget {
   MainFeaturePage({super.key});
 
   final List<BottomNavigationBarItem> items = [
-    BottomNavigationBarItem(
-      icon: Icon(CupertinoIcons.home),
-      label: 'Home',
-    ),
+    // BottomNavigationBarItem(
+    //   icon: Icon(CupertinoIcons.home),
+    //   label: 'Home',
+    // ),
     BottomNavigationBarItem(
       icon: Icon(CupertinoIcons.square_line_vertical_square),
       label: 'Product',
@@ -22,10 +22,10 @@ class MainFeaturePage extends StatelessWidget {
       icon: Icon(CupertinoIcons.shopping_cart),
       label: 'Cart',
     ),
-    BottomNavigationBarItem(
-      icon: Icon(CupertinoIcons.person),
-      label: 'Profile',
-    ),
+    // BottomNavigationBarItem(
+    //   icon: Icon(CupertinoIcons.person),
+    //   label: 'Profile',
+    // ),
   ];
 
   @override
