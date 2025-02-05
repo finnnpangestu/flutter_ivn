@@ -93,7 +93,7 @@ Below is a list of key dependencies used in this project:
 - **Dependency Injection:** get_it, injectable
 - **Networking:** dio, http
 - **UI Components:** google_fonts, flutter_spinkit, shimmer
-- **Testing:** mocktail, bloc_test, mockito
+- **Testing:** mocktail, bloc_test
 - **Others:** auto_route, shared_preferences, cached_network_image
 
 ## Running Tests
