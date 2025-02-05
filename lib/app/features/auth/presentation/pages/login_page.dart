@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ivn/app/features/auth/presentation/controllers/auth_cubit.dart';
 import 'package:flutter_ivn/app/features/auth/presentation/controllers/auth_state.dart';
 import 'package:flutter_ivn/app/global/state/status/status.dart';
+import 'package:flutter_ivn/app/router/app_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
@@ -43,9 +44,12 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(height: 100),
                       Padding(
                         padding: const EdgeInsets.all(20),
-                        child: Text(
-                          'Login',
-                          style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 36, color: Colors.black),
+                        child: InkWell(
+                          onTap: () => context.router.replace(ProductListRoute()),
+                          child: Text(
+                            'Login',
+                            style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 36, color: Colors.black),
+                          ),
                         ),
                       ),
                       Padding(
