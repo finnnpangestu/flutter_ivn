@@ -16,7 +16,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> onLogin({required String username, required String password, required BuildContext context}) async {
     try {
       if (username.isEmpty || password.isEmpty) {
-        GToast.show(context: context, message: 'Username and Password are required', type: GToastType.success);
+        GToast.show(context: context, message: 'Username and Password are required', type: GToastType.alert);
         return;
       }
 

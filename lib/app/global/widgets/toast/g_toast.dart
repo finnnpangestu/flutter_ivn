@@ -9,38 +9,44 @@ import 'package:iconify_flutter/icons/bx.dart';
 enum GToastType {
   success(
     backgroundColor: Colors.greenAccent,
-    borderColor: Colors.green,
-    iconColor: Colors.green,
-    icon: Iconify(Bi.check, color: Colors.green),
+    borderColor: Colors.transparent,
+    iconColor: Color(0xFF1B5E20),
+    textColor: Color(0xFF1B5E20),
+    icon: Iconify(Bi.check_circle, color: Color(0xFF1B5E20)),
   ),
   warning(
     backgroundColor: Colors.yellowAccent,
-    borderColor: Colors.yellow,
-    iconColor: Colors.yellow,
-    icon: Iconify(Bi.exclamation, color: Colors.yellow),
+    borderColor: Colors.transparent,
+    iconColor: Colors.black,
+    textColor: Colors.black,
+    icon: Iconify(Bi.exclamation_circle, color: Colors.black),
   ),
   alert(
     backgroundColor: Colors.redAccent,
-    borderColor: Colors.red,
-    iconColor: Colors.red,
+    borderColor: Colors.transparent,
+    iconColor: Colors.white,
+    textColor: Colors.white,
     icon: Iconify(Bx.x_circle, color: Colors.white),
   ),
   information(
     backgroundColor: Colors.blueAccent,
-    borderColor: Colors.blue,
-    iconColor: Colors.blue,
-    icon: Iconify(Bi.info_circle, color: Colors.blue),
+    borderColor: Colors.transparent,
+    iconColor: Colors.white,
+    textColor: Colors.white,
+    icon: Iconify(Bi.info_circle, color: Colors.white),
   ),
   connection(
-    backgroundColor: Colors.blueAccent,
-    borderColor: Colors.blue,
-    iconColor: Colors.blue,
-    icon: Iconify(Bi.cloud, color: Colors.blue),
+    backgroundColor: Colors.deepPurpleAccent,
+    borderColor: Colors.transparent,
+    iconColor: Colors.white,
+    textColor: Colors.white,
+    icon: Iconify(Bi.cloud, color: Colors.white),
   );
 
   final Color backgroundColor;
   final Color borderColor;
   final Color iconColor;
+  final Color textColor;
   final Widget icon;
 
   const GToastType({
@@ -48,6 +54,7 @@ enum GToastType {
     required this.borderColor,
     required this.iconColor,
     required this.icon,
+    required this.textColor,
   });
 }
 
@@ -150,20 +157,6 @@ class _BToastState extends State<_BToast> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    setTextColor() {
-      if (widget.type == GToastType.success) {
-        return Colors.green;
-      } else if (widget.type == GToastType.warning) {
-        return Colors.black;
-      } else if (widget.type == GToastType.alert) {
-        return Colors.white;
-      } else if (widget.type == GToastType.information) {
-        return Colors.blue;
-      } else if (widget.type == GToastType.connection) {
-        return Colors.blue;
-      }
-    }
-
     return SlideTransition(
       position: animation,
       child: Dismissible(
@@ -192,14 +185,14 @@ class _BToastState extends State<_BToast> with SingleTickerProviderStateMixin {
                   builder: (context) => Expanded(
                     child: Text(
                       widget.message,
-                      style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w500, color: setTextColor()),
+                      style: GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w500, color: widget.type.textColor),
                     ),
                   ),
                 ),
                 const SizedBox(width: 8.0),
                 InkWell(
                   onTap: () => _handleRemove(),
-                  child: Iconify(Bi.x, color: setTextColor(), size: 24),
+                  child: Iconify(Bi.x, color: widget.type.iconColor, size: 24),
                 ),
               ],
             ),

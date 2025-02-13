@@ -1,6 +1,6 @@
 # Flutter IVN
 
-A Flutter project showcasing modern development practices using Clean Architecture principles. This project is built with Flutter 3.27.x and utilizes the latest packages to ensure scalability, maintainability, and testability.
+A Flutter project showcasing modern development practices using Clean Architecture principles. This project is built with Flutter 3.29.x and utilizes the latest packages to ensure scalability, maintainability, and testability.
 
 ## Features
 
