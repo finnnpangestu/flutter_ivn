@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -13,10 +14,7 @@ part of 'app_router.dart';
 /// [CartPage]
 class CartRoute extends PageRouteInfo<void> {
   const CartRoute({List<PageRouteInfo>? children})
-      : super(
-          CartRoute.name,
-          initialChildren: children,
-        );
+    : super(CartRoute.name, initialChildren: children);
 
   static const String name = 'CartRoute';
 
@@ -32,10 +30,7 @@ class CartRoute extends PageRouteInfo<void> {
 /// [LoginPage]
 class LoginRoute extends PageRouteInfo<void> {
   const LoginRoute({List<PageRouteInfo>? children})
-      : super(
-          LoginRoute.name,
-          initialChildren: children,
-        );
+    : super(LoginRoute.name, initialChildren: children);
 
   static const String name = 'LoginRoute';
 
@@ -50,14 +45,12 @@ class LoginRoute extends PageRouteInfo<void> {
 /// generated route for
 /// [MainFeaturePage]
 class MainFeatureRoute extends PageRouteInfo<MainFeatureRouteArgs> {
-  MainFeatureRoute({
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
-          MainFeatureRoute.name,
-          args: MainFeatureRouteArgs(key: key),
-          initialChildren: children,
-        );
+  MainFeatureRoute({Key? key, List<PageRouteInfo>? children})
+    : super(
+        MainFeatureRoute.name,
+        args: MainFeatureRouteArgs(key: key),
+        initialChildren: children,
+      );
 
   static const String name = 'MainFeatureRoute';
 
@@ -65,7 +58,8 @@ class MainFeatureRoute extends PageRouteInfo<MainFeatureRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<MainFeatureRouteArgs>(
-          orElse: () => const MainFeatureRouteArgs());
+        orElse: () => const MainFeatureRouteArgs(),
+      );
       return MainFeaturePage(key: args.key);
     },
   );
@@ -90,13 +84,10 @@ class ProductDetailRoute extends PageRouteInfo<ProductDetailRouteArgs> {
     required String id,
     List<PageRouteInfo>? children,
   }) : super(
-          ProductDetailRoute.name,
-          args: ProductDetailRouteArgs(
-            key: key,
-            id: id,
-          ),
-          initialChildren: children,
-        );
+         ProductDetailRoute.name,
+         args: ProductDetailRouteArgs(key: key, id: id),
+         initialChildren: children,
+       );
 
   static const String name = 'ProductDetailRoute';
 
@@ -104,19 +95,13 @@ class ProductDetailRoute extends PageRouteInfo<ProductDetailRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<ProductDetailRouteArgs>();
-      return ProductDetailPage(
-        key: args.key,
-        id: args.id,
-      );
+      return ProductDetailPage(key: args.key, id: args.id);
     },
   );
 }
 
 class ProductDetailRouteArgs {
-  const ProductDetailRouteArgs({
-    this.key,
-    required this.id,
-  });
+  const ProductDetailRouteArgs({this.key, required this.id});
 
   final Key? key;
 
@@ -132,10 +117,7 @@ class ProductDetailRouteArgs {
 /// [ProductListPage]
 class ProductListRoute extends PageRouteInfo<void> {
   const ProductListRoute({List<PageRouteInfo>? children})
-      : super(
-          ProductListRoute.name,
-          initialChildren: children,
-        );
+    : super(ProductListRoute.name, initialChildren: children);
 
   static const String name = 'ProductListRoute';
 
